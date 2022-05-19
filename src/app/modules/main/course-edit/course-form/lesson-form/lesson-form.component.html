@@ -1,0 +1,172 @@
+<div style="width: 100%; align-items: center; align-content: center; ">
+    <mat-progress-bar mode="determinate" value="66"></mat-progress-bar>
+
+    <div *ngIf="!edit, else changeTitle" class = "editTitle">
+        <button (click)="showEditTitle()" style="background-color: transparent; color: grey;" class="px-6 ml-3"
+            mat-flat-button>
+            Zmeniť názov lekcie
+        </button>
+
+    </div>
+    <ng-template #changeTitle>
+        <form [formGroup]="editChapterForm" style="margin: none; margin-top: 5px; ">
+            <div class="block" style="padding-left: 10px;padding-right: 10px; margin: none;">
+                <div>
+                    <mat-form-field style="width: 16%;" class="flex-auto" appearance="legacy">
+                        <mat-label>Názov lekcie</mat-label>
+                        <input style="padding: 0px;" formControlName="name" matInput placeholder=""
+                            [formControlName]="'name'">
+                        <mat-error *ngIf="editChapterForm.get('name').hasError('required')">
+                            Zadajte názov lekcie
+                        </mat-error>
+                        <mat-error
+                            *ngIf="editChapterForm.get('name').hasError('maxlength') || editChapterForm.get('name').hasError('minlength')">
+                            Lekcia musí mať od 5 do 100 znakov.
+                        </mat-error>
+                    </mat-form-field>
+                    <button (click)="editTitle()" class="px-6 ml-3"
+                        style="margin: none; padding: 2px; background-color: rgba(228, 230, 247, 0.904);  ">
+                        Zmeniť
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <h1 style="text-align: center;font-size: large;margin: 10px;font-weight: bold;">Zoznam všetkých lekcií z kapitoly
+         {{chapter.name}}</h1>
+
+    <div class="customtable">
+        <mat-divider></mat-divider>
+        <table description="Table with lessons" style="width: 100%; margin-right: 0px; background-color:  transparent;box-shadow: none;
+     box-shadow: #63636333 0px 2px 8px 0px;" mat-table [dataSource]="data" class="mat-elevation-z8">
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <ng-container matColumnDef="rank">
+                <th mat-header-cell *matHeaderCellDef> Poradie </th>
+                <td mat-cell *matCellDef="let element"> {{element.rank}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Názov </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef> Upraviť </th>
+                <td mat-cell *matCellDef="let element">
+                    <button (click)="editLesson(element.id_lesson)">
+                        <mat-icon svgIcon="mat_outline:edit" style="fill: darkblue;margin-right: 10px;"></mat-icon>
+                    </button>
+                    <button (click)="deleteLesson(element.id_lesson)">
+                        <mat-icon svgIcon="mat_outline:remove_circle_outline" style="fill: red; margin-left: 10px;">
+                        </mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Zmeniť poradie </th>
+                <td mat-cell *matCellDef="let element">
+                    <div style="display: flex; content: flex;">
+
+                        <div *ngIf="element.rank == 1,else elseBlock">
+                            <button disabled>
+                                <mat-icon svgIcon="mat_outline:arrow_upward"
+                                    style="fill: grey; vertical-align: top;display: inline-block"></mat-icon>
+                            </button>
+                        </div>
+                        <ng-template #elseBlock>
+                            <button (click)="upRank(element.rank)">
+                                <mat-icon svgIcon="mat_outline:arrow_upward"
+                                    style="fill: darkblue;vertical-align: top;display: inline-block"></mat-icon>
+                            </button>
+                        </ng-template>
+                        <div *ngIf="element.rank == this.numberOfElements, else elseBlock1">
+                            <button disabled>
+                                <mat-icon svgIcon="mat_outline:arrow_downward"
+                                    style="fill: grey;vertical-align: top;display: inline-block"></mat-icon>
+                            </button>
+
+                        </div>
+                        <ng-template #elseBlock1>
+                            <button (click)="downRank(element.rank)">
+                                <mat-icon svgIcon="mat_outline:arrow_downward"
+                                    style="fill: darkblue;vertical-align: top; display: inline-block"></mat-icon>
+                            </button>
+                        </ng-template>
+                    </div>
+                </td>
+            </ng-container>
+        </table>
+
+
+        <div>
+
+            <div style=" justify-content: center;  align-items: center">
+
+            
+
+                <div style=" display: flex;  justify-content: center;  align-items: center;">
+                    <button *ngIf="numberOfElements < 30" class="add" (click)="toggle()" id="bt">
+                        + Pridať novu lekciu </button>
+                </div>
+
+
+                <div style="margin: 20px;" >
+                    <fuse-alert class="mt-8 -mb-4" *ngIf="alertShow" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+                    [@shake]="alert.type === 'error'">
+                    {{alert.message}}
+                    </fuse-alert>
+                    </div>
+                <ng-container *ngIf="show && numberOfElements < 30">
+                    <div class="flex flex-col flex-auto min-w-0 "
+                    style="width: 50%;display: flex;  justify-content: center;  align-items: center;  margin: auto; ">
+
+                    <!-- Main -->
+                    <div class="flex-auto sm:p-2">
+                        <div class="flex flex-col  px-8 pt-10 bg-card overflow-hidden">
+                            <div class="flex flex-col gt-xs:flex-row customshadow gt-xs:items-start">
+                                <div class="flex-auto min-w-64">
+                                    <div class="flex">
+                                        <form [formGroup]="lessonForm" style="max-width: 250pxs; position: relative;
+                                        display: inline-block;align-items: center; align-content: center;">
+
+                                            <mat-label>Názov lekcie</mat-label>
+                                            <input formControlName="name" matInput placeholder=""
+                                                [formControlName]="'name'" style="width: 100%;
+                                                        background-color: azure;
+                                                        color: black;
+                                                        padding: 14px 20px;
+                                                        margin: 8px 0;
+                                                        border: 1px solid grey;
+                                                        border-radius: 4px;
+                                                        cursor: pointer;">
+                                            <mat-error *ngIf="lessonForm.get('name').hasError('required')">
+                                                Zadajte názov lekcie
+                                            </mat-error>
+                                            <mat-error
+                                                *ngIf="lessonForm.get('name').hasError('maxlength') || lessonForm.get('name').hasError('minlength')">
+                                                Názov lekcie musí mať od 5 do 100 znakov.
+                                            </mat-error>
+
+
+
+                                            <div class="form-group"
+                                                style="display: flex;  justify-content: center;  align-items: center; padding: none; margin:10px">
+                                                <button class="buttonSubmit" (click)="addLesson()">Pridať</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </ng-container>
+                <div style="text-align:center; padding: 20px">
+                    <h1 *ngIf="numberOfElements >= 30" style="font-weight:bold;color:rgb(144, 55, 14)">Maximálny počet kapitol v kurze je 30 </h1>
+                    </div>
+            </div>
+        </div>
+    </div>

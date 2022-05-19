@@ -1,0 +1,46 @@
+
+<div  style="width: 100%; padding: 30px;" class="customtable">
+    <h1 style="text-align: center;font-size: large;margin: 10px;font-weight: bold;">Pridelenie rolí užívateľom</h1>
+  <div style="padding-left: 40px; padding-bottom: 20px;">
+    <h3>Práva jednotlivých typov užívateľov:</h3>
+    <p><strong>• Študenti</strong> : iba prezeranie kurzov</p>
+    <p><strong>• Učitelia</strong> : upravovanie, mazanie a zverejnenie kurzov</p>
+    <p><strong>• Administrátori</strong> : upravovanie, mazanie a zverejnenie kurzov, prideľovanie rolí užívateľom</p>
+
+    <p>Pre zmenenie role kliknite na rolu pri danom užívatelovi a vyberte z možností.</p>
+  </div>
+  <mat-form-field appearance="standard">
+    <mat-label>Filtrovať</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Užívateľ/rola" #input>
+  </mat-form-field>
+
+    <table class="mat-elevation-z8" style="width: 100%;background-color: transparent;  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;" mat-table [dataSource]="data" class="mat-elevation-z8">
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color: white;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> E-mailová adresa </th>
+            <td mat-cell *matCellDef="let element"> {{element.user_email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef> Rola </th>
+            <td mat-cell *matCellDef="let element" style="flex: 1;"> 
+            <form novalidate autocomplete="off" #form="ngForm" (submit)="changeRole(form,element.user_email)"
+            style="position: relative;
+        display: inline-block;align-items: center; align-content: center;">           
+                <mat-form-field  appearance="legacy" style="padding: 0px;">
+                <mat-select  [(value)]="element.role"  (selectionChange)="setShowTrue(element.user_email, $event.value)"
+                name="role" >
+                  <mat-option value="student">Študent</mat-option>
+                  <mat-option value="teacher">Učiteľ</mat-option>
+                  <mat-option value="admin">Admininstrátor</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button *ngIf="show === true && name === element.user_email && element.user_email != admin " style="float: right; position: relative; margin-left: 40px;" type="submit"  class="add btn btn-success" data-toggle="modal">
+                Uložiť</button>
+
+            </form></td>
+        </ng-container>
+        
+    </table>

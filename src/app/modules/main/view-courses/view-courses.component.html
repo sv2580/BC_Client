@@ -1,0 +1,57 @@
+<div style="margin:0px; padding: 20px; display: flex;" *ngIf="numberOfCourses != 0">
+    <div style="margin:20px;" *ngFor="let item of CourseList; let i = index" [attr.data-index]="i">
+        <div *ngIf="item.visibility">
+            <fuse-card class="flex flex-col max-w-80 w-full filter-info">
+                <div class="flex h-32">
+
+                    <img class="object-cover" src="assets/images/pexels-shvets-production-7562087.jpg"
+                        alt="Card cover image">
+                    <div style="text-align: center; color: aliceblue; position: absolute; left: 50%; top: 25%;  transform: translate(-50%, -50%);"
+                        class="text-2xl font-semibold leading-tight">{{item.name}}</div>
+
+
+                </div>
+                <div class="flex flex-col px-8 pt-4 pb-6">
+                    <div class="flex items-center justify-between">
+                        <div class="mr-4">
+                            <div style="margin-bottom: 10px;" class="text-secondary leading-tight mt-1">Kurz z predmetu
+                                <strong>{{item.subject}}</strong>
+                            </div>
+                        </div>
+
+                    </div>
+                    <p><strong style="margin-top: 10px;"> Počet kapitol: </strong>{{numbers[i]}}</p>
+                    <mat-divider></mat-divider>
+
+                    <div *ngIf="item.description != '' ">
+                        <p style="text-align: justify; font-size: smaller; ">{{item.description}}</p>
+                        <mat-divider></mat-divider>
+
+                    </div>
+
+                    <div class=" items-center">
+                        <button (click)="viewCourse(item.id)" style="margin-top: 20px;" class="mat-stroked-button	">
+                            Prejsť na kurz
+                        </button>
+
+                        <mat-icon
+                            style="margin-left: 20px; fill: yellow !important; position: absolute; top: 10px; right: 20px;"
+                            svgIcon="heroicons_solid:academic-cap"></mat-icon>
+
+                    </div>
+                </div>
+            </fuse-card>
+
+        </div>
+    </div>
+
+</div>
+<div *ngIf="numberOfCourses == 0"
+    style="margin-left:auto; margin-right:auto; padding-top:10%; text-align:center; height: 100%; display: block; justify-content: center;  align-items: center;  margin: auto; ">
+    <div class="shadowcustom">
+        <div style="padding: 50px; background-color: #F7FBFF;">
+            <mat-icon style="transform: scale(2); margin-bottom: 30px" svgIcon="iconsmind:loading_3"></mat-icon> <br>
+            <h1 style="text-align:center;font-size: larger;"> Momentálne nie sú zverejnené žiadne kurzy </h1>
+        </div>
+    </div>
+</div>

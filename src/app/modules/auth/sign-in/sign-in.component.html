@@ -1,0 +1,64 @@
+<div class="flex  sm:flex-row items-center  sm:justify-center  flex-auto min-w-0">
+    <div
+        class="md:flex md:items-center  w-full sm:w-auto md:h-full  py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+
+
+
+            <!-- Alert -->
+            <fuse-alert class="mt-8 -mb-4" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type" [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </fuse-alert>
+
+            <!-- Sign in form -->
+            <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
+
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>E-mailová adresa</mat-label>
+                    <input id="email" matInput [formControlName]="'user_email'">
+                    <mat-error *ngIf="signInForm.get('user_email').hasError('required')">
+                        Zadajte e-mailovú adresu
+                    </mat-error>
+                    <mat-error *ngIf="signInForm.get('user_email').hasError('email')">
+                        Zadajte správnu e-mailovú adresu
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Heslo</mat-label>
+                    <input id="password" matInput type="password" [formControlName]="'user_password'" #passwordField>
+                    <button mat-icon-button type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                    </button>
+                    <mat-error>
+                        Zadajte heslo
+                    </mat-error>
+                </mat-form-field>
+
+
+                <!-- Submit button -->
+                <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+                    [disabled]="signInForm.disabled" (click)="signIn()">
+                    <span *ngIf="!signInForm.disabled">
+                        Prihlásenie
+                    </span>
+                    <mat-progress-spinner *ngIf="signInForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+
+
+            </form>
+
+
+
+        </div>
+    </div>
+</div>

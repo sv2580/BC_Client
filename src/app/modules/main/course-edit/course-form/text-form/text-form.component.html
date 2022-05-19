@@ -1,0 +1,94 @@
+
+<div>
+    <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+
+<div style="border-width: 0;min-height: 100%; height: 100% !important; width: 100% !important ;min-width: 100%; padding: 20px;">
+
+    <div *ngIf="!edit, else changeTitle" style="float: right;position: absolute;">
+        <button (click)="showEdit()" style="background-color: transparent; color: grey;" class="px-6 ml-3"
+            mat-flat-button>
+            Zmeniť názov lekcie
+        </button>
+
+    </div>
+
+    <ng-template #changeTitle>
+        <form [formGroup]="TitleForm" style="margin: none; margin-top: 5px; ">
+            <div class="block" style="padding-left: 10px;padding-right: 10px; margin: none;">
+                <div>
+                    <mat-form-field style="width: 16%;" class="flex-auto" appearance="legacy">
+                        <mat-label>Názov</mat-label>
+                        <input style="padding: 0px;" formControlName="name" matInput placeholder=""  [formControlName]="'name'">
+                        <mat-error *ngIf="TitleForm.get('name').hasError('required')" >
+                          Zadajte názov 
+                      </mat-error>
+                      <mat-error
+                          *ngIf="TitleForm.get('name').hasError('maxlength') || TitleForm.get('name').hasError('minlength')">
+                          Názov musí mať od 5 do 100 znakov.
+                      </mat-error>
+                    </mat-form-field>
+                    <button (click)="editLesson()" class="px-6 ml-3"
+                        style="margin: none; padding: 2px; background-color: rgba(228, 230, 247, 0.904);  ">
+                        Zmeniť
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <h1 style="text-align: center;font-size: large;margin: 10px;font-weight: bold;">Lekcia: {{lesson.name}}</h1>
+
+    <div *ngIf="!text,else elseBlock">
+        <form [formGroup]="TextForm">
+            <quill-editor style="min-height: 100%; " formControlName="text" [modules]="modules" style="border: none;">
+            </quill-editor>
+            <div style="display: flex;  justify-content: center;  align-items: center; padding: none; margin:10px">
+
+                <button (click)="editText()" class="px-6 ml-3" mat-flat-button>
+                    Pridať
+                </button>
+            </div>
+        </form>
+    </div>
+    <ng-template #elseBlock>
+
+        <div class="form-group"
+            style="display: flex;  justify-content: center;  align-items: center; padding: none; margin:10px">
+            <button (click)="deleteText()" style="border-color: red; color: red;" class="px-6 ml-3" mat-flat-button>
+                Zmazať
+            </button>
+
+            <button (click)="showEdit()" style="border-color: red; color: darkblue;" class="px-6 ml-3" mat-flat-button>
+                <div *ngIf="!edit; else elseHide"> Upraviť </div>
+                <ng-template #elseHide> Späť </ng-template>
+            </button>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div *ngIf="!edit,else elseEdit">
+
+            <div class="ql-container ql-snow"
+                style="border-width: 0; max-height: none  !important; min-height: 100%; min-width: 100% !important ;  height :100% !important;"
+                theme="bubble">
+
+                <div class="ql-editor" [innerHTML]="text"
+                    style="border-width: 0;width: 100% !important ;min-width: 100% !important ; max-height: none  !important; height :100% !important; min-height: 100%;  padding: 100px;"
+                    theme="bubble">
+                </div>
+            </div>
+        </div>
+        <ng-template #elseEdit>
+            <form [formGroup]="TextForm"
+                style="border-width: 0; max-height: none  !important;  ">
+                <quill-editor formControlName="text" [(ngModel)]="text" [modules]="modules"
+                    style="border-width: 0; max-height: none  !important; height :100% !important; padding: 100px;">
+                </quill-editor>
+                <div style="display: flex;  justify-content: center;  align-items: center; padding: none; margin:10px">
+                    <button (click)="editText()" class="px-6 ml-3" mat-flat-button>
+
+                        Uložiť
+                    </button>
+                </div>
+            </form>
+        </ng-template>
+    </ng-template>
+</div></div>

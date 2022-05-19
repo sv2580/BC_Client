@@ -1,0 +1,104 @@
+<div style="padding: 0px; width: 100%; overflow:auto" style="flex: none !important; width: 100%;" class=" container">
+  <div class="left">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="right" style="background-color: white; text-align: center; justify-content: center;">
+    <div class="prose lg:w-full md:w-full headerInfo">
+      <div *ngIf="edit, else elseEdit">
+        <h1 style="font-size: 25px;     color: white;
+          ">Kurz: {{course.name}}</h1>
+        <h1 style="font-size: larger;     color: white;
+          ">Predmet: {{course.subject}}</h1>
+        <div style=" float: right;">
+          <button (click)="editShow()" style=" margin-bottom: 10px;margin-top: 0px; padding: 2px">
+            <mat-icon svgIcon="mat_outline:edit" style="fill: white;margin-right: 10px;"></mat-icon>
+          </button>
+        </div>
+      </div>
+      <ng-template #elseEdit>
+        <form [formGroup]="courseTitle" style="margin: none;">
+          <div class="block" style="padding-left: 10px;padding-right: 10px; margin: none;">
+            <div style="width: 100%;">
+              <mat-form-field class="flex-auto" appearance="legacy">
+                <mat-label style=" color: white;">Názov kurzu</mat-label>
+                <input style="padding: 0px;" formControlName="name" matInput placeholder="" [formControlName]="'name'">
+                <mat-error *ngIf="courseTitle.get('name').hasError('required')" >
+                  Zadajte názov 
+              </mat-error>
+              <mat-error
+                  *ngIf="courseTitle.get('name').hasError('maxlength') || courseTitle.get('name').hasError('minlength')">
+                  Názov musí mať od 5 do 100 znakov.
+              </mat-error>
+              </mat-form-field>
+            </div>
+            <div style="width: 100%;">
+
+              <mat-form-field class="flex-auto" appearance="legacy">
+                <mat-label style="color: white;">Predmet</mat-label>
+
+                <input style="padding: 0px;" formControlName="subject" matInput placeholder="" [formControlName]="'subject'">
+                <mat-error *ngIf="courseTitle.get('subject').hasError('required')" >
+                  Zadajte predmet 
+              </mat-error>
+              <mat-error
+                  *ngIf="courseTitle.get('subject').hasError('maxlength') || courseTitle.get('subject').hasError('minlength')">
+                  Predmet musí mať od 5 do 100 znakov.
+              </mat-error>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </form>
+        <button (click)="changeTitle()" class="px-6 ml-3" style=" margin-bottom: 10px;margin-top: 0px;" mat-flat-button>
+          Zmeniť
+        </button>
+      </ng-template>
+    </div>
+    <div style="padding: 10px; flex: 1; height: 80%;">
+      <div style=" border: 4px dashed aliceblue ; height: 100%;" class="prose lg:w-full md:w-full">
+        <h2 style="font-size: small;">Počet kapitôl: {{courseChapters}}</h2>
+        <h2 style="font-size: small;">Počet lekcií: {{courseLessons}}</h2>
+        <h2 style="font-size: small;">Počet vyplnených lekcií: {{courseCompletedLessons}}</h2>
+        <div *ngIf ="course.visibility, else visibility">
+          <h2 style="font-size: small; font-weight: lighter;">Kurz je viditeľný pre študentov</h2>
+        </div><ng-template #visibility>
+          <h2 style="font-size: small; font-weight: lighter;">Kurz nie je viditeľný pre študentov</h2>
+        </ng-template>
+        <mat-divider></mat-divider>
+        <strong style="margin:10px">Popis kurzu: </strong>
+        <div style="font-size: smaller;" *ngIf="desc, else elseBlock">
+          <div style="width: 100%;">
+            {{course.description}}</div>
+            <div style="justify-items: auto; float: right; margin-top: 10px;">
+              <button (click)="descShow()" style=" margin-bottom: 10px;margin-top: 0px; padding: 2px">
+                <mat-icon svgIcon="mat_outline:edit" style="fill: darkblue;margin-right: 10px;"></mat-icon>
+              </button>
+            </div>
+        </div>
+        <ng-template #elseBlock>
+          <form [formGroup]="courseDescription" style="margin: none;">
+            <div class="flex" style="padding-left: 10px;padding-right: 10px; margin: none;">
+              <mat-form-field class="flex-auto">
+                <textarea input value="{{course.description}}" formControlName="description" matInput placeholder=""  [formControlName]="'description'">
+                        Zadajte popis
+                    </textarea>
+                    <mat-error *ngIf="courseDescription.get('description').hasError('required')" >
+                      Zadajte popis 
+                  </mat-error>
+                  <mat-error
+                      *ngIf="courseDescription.get('description').hasError('maxlength') || courseDescription.get('description').hasError('minlength')">
+                      Popis musí mať od 5 do 256 znakov.
+                  </mat-error>
+              </mat-form-field>
+            </div>
+          </form>
+          <button (click)="addDescription()" class="px-6 ml-3" style=" margin-bottom: 10px;margin-top: 0px; border: 1px solid white;  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+            mat-flat-button>
+            Zmeniť popis
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

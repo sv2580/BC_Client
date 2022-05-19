@@ -1,0 +1,108 @@
+<!-- Navigation -->
+<fuse-vertical-navigation style="background-color: #2b3a64 !important;" class="dark text-white print:hidden"
+  [mode]="isScreenSmall ? 'over' : 'side'" [name]="'mainNavigation'" [opened]="!isScreenSmall">
+  <!-- Navigation header hook -->
+  <ng-container fuseVerticalNavigationHeader>
+    <!-- Logo -->
+    <div class="flex items-center h-5 p-20 pb-10">
+      <a alt="Logo" href="view"><img class="w-30" alt="Uniza logo" src="assets/images/logo/uniza_web_logo_sk.png"></a>
+    </div>
+    <hr class="solid">
+
+    <div class="max-w-2xl prose prose-sm">
+      <h1 style="font-size: larger; text-align: center;padding-bottom: 10px;">Hlavné menu</h1>
+    </div>
+
+    <style>
+      .button:hover {
+        background-color: #06080e !important;
+      }
+    </style>
+
+    <div class="dropdown" style="width: 100%;">
+      <button class="dropbtn" [routerLink]="['view']">
+        <mat-icon svgIcon="mat_outline:school" style="float: left;"></mat-icon>
+        Zobraziť kurzy
+      </button>
+    </div>
+    <div *ngIf="user.role != 'student'">
+      <button class="button" [routerLink]="['./courses/edit-courses']">
+        <mat-icon svgIcon="mat_outline:edit_note" style="float: left;" href="table-courses"></mat-icon>
+        Upraviť kurzy
+      </button>
+      <div *ngIf="user.role == 'admin'">
+        <button class="button" [routerLink]="['./admin']">
+          <mat-icon svgIcon="mat_outline:person_outline" style="float: left;"></mat-icon>
+          Prideliť práva
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Navigation footer hook -->
+  <ng-container fuseVerticalNavigationFooter>
+    <!-- User -->
+    <div class="flex items-center w-full px-6 py-8 border-t">
+
+      <div class="flex flex-col w-full ml-4 overflow-hidden" >
+        <div class="w-full mt-0.5 opacity-50" style="font-size: smaller;">
+         
+        <div *ngIf="user.role == 'student'">Prihlasený študent</div>
+        <div *ngIf="user.role == 'teacher'">Prihlasený učiteľ</div>
+        <div *ngIf="user.role == 'admin'">Prihlasený administrátor</div>
+
+      </div>
+        <div class="w-full whitespace-nowrap overflow-ellipsis overflow-hidden leading-normal text-current opacity-80">
+          {{user.user_email}}
+        </div>
+        <div
+          class="w-full mt-0.5 whitespace-nowrap text-sm overflow-ellipsis overflow-hidden leading-normal text-current opacity-50">
+
+
+        </div>
+        <div style=" width: 200px; overflow: hidden; clear: both;">
+          <button style=" font-size: smaller; float: right " (click)="signOut()">Odhlásiť</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+  <!-- Header -->
+  <div
+    class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+    <!-- Navigation toggle button -->
+    <button class="mr-2" mat-icon-button (click)="toggleNavigation('mainNavigation')">
+      <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+    </button>
+
+    <!-- Components -->
+    <div class="flex items-center pl-2 ml-auto space-x-2">
+
+      <a href="view">
+        <mat-icon  svgIcon="mat_outline:home"></mat-icon>
+      </a>
+
+
+    </div>
+  </div>
+  <!-- Content -->
+  <div class="flex flex-col flex-auto">
+
+    <!-- CONTENT GOES HERE -->
+
+    <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+    <router-outlet *ngIf="true"></router-outlet>
+  </div>
+
+  <!-- Footer -->
+  <div
+    class="relative flex flex-0 items-center justify-start w-full h-14 px-4 md:px-6 z-49 border-t bg-card dark:bg-transparent print:hidden">
+    <br> <span style="float: right; margin-left: 50%;" class="font-medium text-secondary"> Fuse &copy;
+      {{currentYear}}</span>
+  </div>
+
+</div>

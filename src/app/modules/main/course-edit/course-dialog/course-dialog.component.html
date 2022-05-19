@@ -1,0 +1,24 @@
+<div style="max-width: 350px">
+<h1 mat-dialog-title style="text-align: center; color:  #2b3a64;">Naozaj si želáte zverejniť kurz {{name}}?</h1>
+<div mat-dialog-content style="font-size: larger;">
+  <p><strong>Tento kurz obsahuje</strong></p>
+  <p> • Kapitoly: {{chapters}}   </p>
+  <p> • Lekcie: {{lessons}}   </p>
+  <div *ngIf="emptyLessons == 1">
+    <p style="color: red;"> • <strong>Nevyplnené lekcie: {{emptyLessons}}</strong> </p>
+  </div>
+</div>
+
+<mat-dialog-actions style="display: flex;  justify-content: center;  align-items: center; ">
+
+    <button style="margin: 10px; float:left"  class="mat-raised-button"
+            (click)="close(false)">
+        Zavrieť
+    </button>
+
+    <button style="margin: 10px; float:right" class="mat-raised-button mat-primary"
+    (click)="close(true)">
+        Zverejniť
+    </button>
+
+</mat-dialog-actions></div>
