@@ -24,10 +24,11 @@ export class ViewCoursesComponent implements OnInit {
   numberOfCourses: number = 0;
 
   ngOnInit(): void {
-    this.refresList();
+    this.refreshList();
   }
 
-  refresList() {
+  refreshList() {
+
     this.serviceCourse.getCourses().subscribe(data => {
       let list: Course[] = data;
       if (list.length > 0) {
